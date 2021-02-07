@@ -1,2 +1,2 @@
-rootProject.name = 'user-management'
+rootProject.name = 'initial-repository-for-java'
 enableFeaturePreview('ONE_LOCKFILE_PER_PROJECT')
