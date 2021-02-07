@@ -1,0 +1,1 @@
+database fi not exists user_management charaset utf8mb4 collate utf8mb4_unicode_ci;

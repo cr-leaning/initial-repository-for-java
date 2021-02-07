@@ -1,0 +1,54 @@
+version: '3.8'
+
+x-template: &flyway-template
+  image: flyway/flyway:7.5
+  volumes:
+    - ./src/main/resources/db/migration:/flyway/sql
+    - ./src/main/resources/db/conf:/flyway/conf
+  depends_on: 
+    - mysql
+
+
+services:
+  # いつかはAWSのAuroraへ移行したいのでmysqlで、、、
+  mysql:
+    image: library/mariadb:10.5
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    ports: 
+      - 3306
+    volumes:
+      - ./init.sql:/docker-entrypoints-initdb.d/init.sql
+    environment:
+      MYSQL_DATABASE: user_management
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+
+#  flyway-clean:
+#    <<: *flyway-template
+#    command: clean
+#
+#  flyway-migrate:
+#    <<: *flyway-template
+#    command: migrate
+#
+#  flyway-info:
+#    <<: *flyway-template
+#    command: info
+#
+#  flyway-repair:
+#    <<: *flyway-template
+#    command: repair
+
+  flyway-clean-migrate:
+    <<: *flyway-template
+    entrypoint: 
+       - /bin/sh
+       - -c 
+       - until (/flyway/flyway clean) do echo '...waiting...' && sleep 1; done; /flyway/flyway migrate; exit $$?;
+    
+  redis:
+    image: library/redis:6.0
+    command: redis-server --appendonly yes
+    ports:
+      - 6379
+      
