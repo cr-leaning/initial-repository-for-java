@@ -1,10 +1,9 @@
 # initial
 initial-repository-for-java
 
-https://docs.github.com/ja/github/creating-cloning-and-archiving-repositories/duplicating-a-repository
-
 ## 主な機能
-- *****します。
+- Javaプロジェクトを作成する際はこれをCopyする。
+https://docs.github.com/ja/github/creating-cloning-and-archiving-repositories/duplicating-a-repository
 
 ## 概要
 |Category | | Category | | Category | |
