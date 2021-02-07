@@ -1,0 +1,184 @@
+buildscript {
+	ext {
+		springBootVersion = '2.4.2'
+		dockerComposeVersion = '0.14.0'
+	}
+    repositories {
+        mavenCentral()
+    	maven {
+   			url "https://plugins.gradle.org/m2/"
+    	}
+    }
+    dependencies {
+        classpath "com.avast.gradle:gradle-docker-compose-plugin:${dockerComposeVersion}"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'docker-compose'
+
+group = 'com.nekose.officemanage'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+//	maven { url 'https://localhost/---' }
+}
+
+sourceSets {
+	main {
+		resources.srcDirs = ["src/main/resources"]
+	}
+	functionalTest {
+		java {
+			srcDir 'src/functionalTest/java'
+		}
+		resources {
+			srcDir 'src/functionalTest/resources'
+		}
+		compileClasspath += main.output + test.output
+		runtimeClasspath += main.output + test.output
+	}
+}
+
+ext {
+	springCloudVersion = '2020.0.1'
+    mockitoVersion = '2.21.0'
+    mariaDbClientVersion = '2.7.2'
+    springColudSecurityVersion = '2.2.4.RELEASE'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+	implementation 'org.springframework.session:spring-session-core'
+	
+	// fegin
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'io.github.openfeign:feign-httpclient'
+
+    // security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation "org.springframework.cloud:spring-cloud-security:${springColudSecurityVersion}"
+	implementation 'org.springframework.security.oauth:spring-security-oauth2'
+    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure'
+
+	implementation "org.mariadb.jdbc:mariadb-java-client:${mariaDbClientVersion}"
+	annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'com.h2database:h2'
+
+	
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'com.h2database:h2'
+	testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
+}
+
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'junit', module: 'junit'
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	testCompileOnly {
+		extendsFrom testAnnotationProcessor
+	}
+	functionalTestCompile.extendsFrom testImplementation
+	functionalTestRuntime.extendsFrom testRuntime
+	compileClasspath {
+		resolutionStrategy.activateDependencyLocking()
+	}
+	runtimeClasspath {
+		resolutionStrategy.activateDependencyLocking()
+	}
+}
+
+bootRun {
+	jvmArgs = [
+		'-Dspring.profiles.active=local',
+		'-Dlogging.config=classpath:log4j2-local.xml'
+	]
+	if (project.hasProperty('jvmArgs')) {
+		jvmArgs = (project.jvmArgs.split("\\s+" as Closure) as List)
+	}
+	dependsOn(composeUp)
+}
+
+test {
+	jvmArgs = [
+		'-Dlogging.config=classpath:log4j2-local.xml'
+	]
+	useJUnitPlatform()
+	testLogging {
+		exceptionFormat 'full'
+		events('started', 'passed', 'skipped', 'failed')
+	}
+	outputs.upToDateWhen { false }
+	dependsOn(composeUp)
+}
+
+task functionalTest(type: Test) {
+	useJUnitPlatform()
+	group = "verification"
+	testClassesDirs = sourceSets.functionalTest.output
+	classpath = sourceSets.functionalTest.runtimeClasspath
+	testLogging {
+		exceptionFormat 'full'
+		events('started', 'passed', 'skipped', 'failed')
+	}
+	mustRunAfter(test)
+	outputs.upToDateWhen { false }
+	dependsOn(composeUp)
+}
+
+task updateLockFile(type: Exec) {
+	group = "other"
+    executable = "$rootDir/update_gradle_lock_file.bat"
+//    executable = "$rootDir/update_gradle_lock_file.sh"
+}
+
+dockerCompose {
+	isRequiredBy(project.tasks.getByName("bootRun"))
+	isRequiredBy(project.tasks.getByName("test"))
+	isRequiredBy(project.tasks.getByName("functionalTest"))
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

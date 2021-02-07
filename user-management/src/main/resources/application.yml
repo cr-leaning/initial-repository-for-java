@@ -1,0 +1,34 @@
+### common
+server:
+  port: 8100
+  tomcat:
+    threads:
+      max: "${TOMCAT_MAX_THREADS:100}"
+      min-spare: "${MIN_SPARE_THREAD:10}"
+management:
+  endpoints:
+    web:
+      # for actuator
+      base-path: /
+      exposure:
+        include:
+        - "health"
+        - "configprops"
+        - "info"
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+
+### for spring
+spring:
+  application:
+    name: user-management
+  profiles:
+    active: ${PROFILE:local}
+  datasource:
+    username: ${DB_USER:app_user}
+    password: ${DB_PASSWARD:app_user}
+    url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/user_management}
+  flyway:
+    enabled: false
+

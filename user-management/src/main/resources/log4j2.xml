@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>  
+<Configuration status="INFO" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="log4j2-properties.xml">
+    </xi:include>
+    
+    <Appenders>
+        <!-- コンソールに出力する設定 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>${LOG_FORMAT}</pattern>
+            </PatternLayout>
+        </Console>
+
+        <!-- ファイルに出力する設定 -->
+        <RollingFile name="logfile001" append="true" fileName="LOGFILE_NAME"
+            filePattern="${LOGFILE_NAME_ARCHIVE}">
+            <PatternLayout>
+                <pattern>${LOG_FORMAT}</pattern>
+            </PatternLayout>
+            <Policies>
+                //　1kBに達したらローテーションのファイルを作成する
+                <SizeBasedTriggeringPolicy size="1KB"/>
+            </Policies>
+            //　ローテーションのファイルは、3つ持つ
+            <DefaultRolloverStrategy max="3"/>
+        </RollingFile>
+    </Appenders>
+    
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="logfile001" />
+        </Root>
+    </Loggers>
+</Configuration>
