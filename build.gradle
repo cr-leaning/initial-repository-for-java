@@ -8,7 +8,7 @@ plugins {
 	id 'maven'
 }
 
-group = 'com.nekose.officemanage'
+group = 'com.nekose.sampleproject'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
@@ -38,6 +38,9 @@ ext {
     mockitoVersion = '2.21.0'
     mariaDbClientVersion = '2.7.2'
     springColudSecurityVersion = '2.2.4.RELEASE'
+	jedisVersion = '3.5.1'
+	springMybatisVersion = '2.1.4'
+	springRedisVersion = '2.4.5'
 }
 
 dependencyManagement {
@@ -51,6 +54,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
 	implementation 'org.springframework.session:spring-session-core'
 	
@@ -64,12 +68,17 @@ dependencies {
 	implementation 'org.springframework.security.oauth:spring-security-oauth2'
     implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure'
 
+	// db
 	implementation "org.mariadb.jdbc:mariadb-java-client:${mariaDbClientVersion}"
+	implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:${springMybatisVersion}"
+	implementation "org.springframework.data:spring-data-redis:${springRedisVersion}"
+	implementation "redis.clients:jedis:${jedisVersion}"
+
+	// other
 	annotationProcessor 'org.projectlombok:lombok'
 
-    implementation 'com.h2database:h2'
 
-	
+	// for test
 	testAnnotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'

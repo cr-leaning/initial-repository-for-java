@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE project>  
 <Configuration status="INFO" xmlns:xi="http://www.w3.org/2001/XInclude">
     <xi:include href="log4j2-properties.xml">
     </xi:include>

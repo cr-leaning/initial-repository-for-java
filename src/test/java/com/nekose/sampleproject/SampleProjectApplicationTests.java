@@ -1,10 +1,10 @@
-package com.nekose.officemanage.usermanagement;
+package com.nekose.sampleproject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UserManagementApplicationTests {
+class SampleProjectApplicationTests {
 
 	@Test
 	void contextLoads() {
