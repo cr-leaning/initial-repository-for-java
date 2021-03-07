@@ -67,6 +67,13 @@ spring:
         await-termination: true
         await-termination-period: 30s
 
+# for OAuth2
+security:
+  oauth2:
+    resource:
+      user-info-uri: https://api.github.com/user
+      preferTokenInfo: false
+
 
 mybatis:
   configuration:

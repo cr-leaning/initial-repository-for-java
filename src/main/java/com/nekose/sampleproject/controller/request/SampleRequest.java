@@ -1,12 +1,14 @@
 package com.nekose.sampleproject.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nekose.sampleproject.domain.model.entity.DataStatusInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,4 +26,7 @@ public class SampleRequest {
     @Size(max=20)
     @JsonProperty("value")
     private String value;
+
+    @Valid
+    private DataStatusInfo dataStatusInfo;
 }

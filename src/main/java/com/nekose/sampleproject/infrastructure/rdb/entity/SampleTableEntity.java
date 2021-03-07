@@ -1,6 +1,7 @@
 package com.nekose.sampleproject.infrastructure.rdb.entity;
 
 import com.nekose.sampleproject.controller.request.SampleRequest;
+import com.nekose.sampleproject.domain.model.entity.DataStatusInfo;
 import lombok.*;
 
 @Data
@@ -12,11 +13,13 @@ public class SampleTableEntity extends BaseEntity {
     private Long id;
     private String name;
     private String value;
+    private DataStatusInfo dataStatusInfo;
 
     public static SampleTableEntity from(SampleRequest request) {
         return SampleTableEntity.builder()
                 .name(request.getName())
                 .value(request.getValue())
+                .dataStatusInfo(request.getDataStatusInfo())
                 .build();
     }
 

@@ -9,16 +9,22 @@
         <result column="name" property="name" />
         <result column="value" property="value" />
         <result column="deleted_flg" property="deletedFlg" />
-        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime" />
-        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
         <result column="create_by" property="createBy" />
         <result column="update_by" property="updateBy" />
         <result column="version" property="version" />
+        <association property="dataStatusInfo" javaType="com.nekose.sampleproject.domain.model.entity.DataStatusInfo" >
+            <result column="data_status" property="status" />
+            <result column="data_information" property="information" />
+        </association>
     </resultMap>
 
     <sql id="sampleTableCommonColumn">
         name,
         value,
+        data_status,
+        data_information,
         deleted_flg,
         create_date,
         update_date,
@@ -35,6 +41,8 @@
         VALUES (
                 #{name},
                 #{value},
+                #{dataStatusInfo.status},
+                #{dataStatusInfo.information},
                 false,
                 now(3),
                 now(3),
@@ -53,6 +61,12 @@
             </if>
             <if test="value != null">
                 ,value = #{value}
+            </if>
+            <if test="dataStatusInfo.status != null">
+                ,value = #{dataStatusInfo.status}
+            </if>
+            <if test="dataStatusInfo.information != null">
+                ,value = #{dataStatusInfo.information}
             </if>
             <if test="deletedFlg != null">
                 ,deleted_flg = #{deletedFlg}
@@ -76,7 +90,7 @@
         DELETE FROM sample_table WHERE id = #{id}
     </delete>
 
-    <select id="findById" parameterType="long" resultMap="SampleTableEntity" >
+    <select id="findById" parameterType="long" resultMap="sampleTableEntity" >
         SELECT
             id,
             <include refid="sampleTableCommonColumn" />
@@ -84,7 +98,7 @@
         WHERE id = #{id}
     </select>
 
-    <select id="findByValueAndDeletedFlg" resultMap="SampleTableEntity" >
+    <select id="findByValueAndDeletedFlg" resultMap="sampleTableEntity" >
         SELECT
         id,
         <include refid="sampleTableCommonColumn" />

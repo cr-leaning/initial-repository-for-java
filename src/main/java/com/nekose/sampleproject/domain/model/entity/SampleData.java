@@ -12,6 +12,7 @@ public class SampleData {
     private Long id;
     private String name;
     private String value;
+    private DataStatusInfo dataStatusInfo;
     private String createDate;
     private String updateDate;
 
@@ -20,6 +21,7 @@ public class SampleData {
                 .id(entity.getId())
                 .name(entity.getName())
                 .value(entity.getValue())
+                .dataStatusInfo(entity.getDataStatusInfo())
                 .createDate(DateUtils.toIsoFormatString(entity.getCreateDate()))
                 .updateDate(DateUtils.toIsoFormatString(entity.getUpdateDate()))
                 .build();

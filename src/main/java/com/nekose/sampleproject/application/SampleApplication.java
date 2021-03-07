@@ -21,7 +21,7 @@ public class SampleApplication {
     public SampleData get(Long id) {
         return sampleDataRepository.findById(id)
                 .map(entity -> sampleDataService.getSampleData(entity))
-                .orElse(SampleData.builder().build());
+                .orElse(null);
     }
 
     public SearchSampleData search(SearchSampleRequest request) {
