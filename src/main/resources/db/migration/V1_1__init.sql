@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS sample_table1 (
+CREATE TABLE IF NOT EXISTS sample_table (
 	id BIGINT(13) NOT NULL AUTO_INCREMENT,
 	name VARCHAR(20),
 	value VARCHAR(20),
@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS sample_table1 (
 	update_by VARCHAR(64) NULL,
 	version INT DEFAULT 1,
 	PRIMARY KEY (id),
-	UNIQUE KEY sample_table1_name(name) USING BTREE
+	UNIQUE KEY sample_table_name(name) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

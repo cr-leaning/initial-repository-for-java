@@ -1,19 +1,21 @@
 package com.nekose.sampleproject.application.repository;
 
 import com.nekose.sampleproject.infrastructure.rdb.entity.SampleTableEntity;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Optional;
 
-interface SampleTableRepository {
-    void store(SampleTableEntity entity);
+public interface SampleDataRepository {
+    Long store(SampleTableEntity entity);
 
-    void update(SampleTableEntity entity);
+    Long update(SampleTableEntity entity);
 
     void delete(Long id);
 
-    void physicalDelete(SampleTableEntity entity);
+    void physicalDelete(Long id);
 
-    SampleTableEntity findById(Long id);
+    Optional<SampleTableEntity> findById(Long id);
 
     List<SampleTableEntity> findByValueAndDeletedFlg(String value,
                                                      Boolean deletedFlg);

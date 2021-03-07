@@ -7,6 +7,10 @@ public enum ResultStatus {
 
     private String value;
 
+    public String getValue() {
+        return this.value;
+    }
+
     ResultStatus(String value) {
         this.value = value;
     }

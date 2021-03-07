@@ -5,18 +5,19 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface SampleTableMapper {
-    void store(SampleTableEntity entity);
+    long store(SampleTableEntity entity);
 
-    void update(SampleTableEntity entity);
+    long update(SampleTableEntity entity);
 
     void delete(Long id);
 
-    void physicalDelete(SampleTableEntity entity);
+    void physicalDelete(Long id);
 
-    SampleTableEntity findById(Long id);
+    Optional<SampleTableEntity> findById(Long id);
 
     List<SampleTableEntity> findByValueAndDeletedFlg(@Param("value") String value,
                                                      @Param("deletedFlg") Boolean deletedFlg);

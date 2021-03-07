@@ -41,6 +41,7 @@ ext {
 	jedisVersion = '3.5.1'
 	springMybatisVersion = '2.1.4'
 	springRedisVersion = '2.4.5'
+	commonsVersion = '3.11'
 }
 
 dependencyManagement {
@@ -76,13 +77,13 @@ dependencies {
 
 	// other
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation "org.apache.commons:commons-lang3:${commonsVersion}"
 
 
 	// for test
 	testAnnotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'com.h2database:h2'
 	testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
 }
 
@@ -157,16 +158,3 @@ dockerCompose {
 	isRequiredBy(project.tasks.getByName("test"))
 	isRequiredBy(project.tasks.getByName("integrationTest"))
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -5,6 +5,7 @@ server:
     threads:
       max: "${TOMCAT_MAX_THREADS:100}"
       min-spare: "${MIN_SPARE_THREAD:10}"
+  shutdown: graceful
 management:
   endpoints:
     web:
@@ -22,13 +23,36 @@ management:
 ### for spring
 spring:
   application:
-    name: user-management
+    name: sample-project
   profiles:
-    active: ${PROFILE:local}
+    active: "${PROFILE:local}"
+  jmx:
+    enabled: true
+  ### for spring cloud
+  cloud:
+    features:
+      enabled: false
+  ### for DB
   datasource:
     username: ${DB_USER:app_user}
     password: ${DB_PASSWARD:app_user}
     url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/user_management}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 1
+      connection-timeout: 3000
+      max-lifetime: 60000
+      pool-name: sample-projcet-pool
   flyway:
     enabled: false
+
+mybatis:
+  configuration:
+    default-statement-timeout: 2
+
+logging:
+  level:
+    root: ${LOG_LEVEL:INFO}
+    com.nekose.sampleproject: ${APP_LOG_LEVEL:INFO}
 
