@@ -1,7 +1,6 @@
 package com.nekose.sampleproject.application.repository;
 
 import com.nekose.sampleproject.infrastructure.rdb.entity.SampleTableEntity;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Optional;
