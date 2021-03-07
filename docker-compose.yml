@@ -19,7 +19,7 @@ services:
     volumes:
       - ./init.sql:/docker-entrypoints-initdb.d/init.sql
     environment:
-      MYSQL_DATABASE: user_management
+      MYSQL_DATABASE: sample_project
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: root
 

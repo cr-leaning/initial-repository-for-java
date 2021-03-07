@@ -1,1 +1,1 @@
-database fi not exists user_management charaset utf8mb4 collate utf8mb4_unicode_ci;
+database fi not exists sample_project charaset utf8mb4 collate utf8mb4_unicode_ci;

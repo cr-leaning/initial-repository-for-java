@@ -29,12 +29,12 @@ public class SampleDataController {
     return ResponseEntity.status(HttpStatus.OK)
             .contentType(MediaType.APPLICATION_JSON)
             .body(Response.<SampleData>builder()
-                    .resultInfo(Response.BaseResponse.builder().build())
+                    .resultInfo(SampleProjectConstants.RESULT_INFO_OK)
                     .data(sampleApplication.get(id))
                     .build());
   }
 
-  @PostMapping
+  @PostMapping("search")
   public ResponseEntity<Response<SearchSampleData>> searchSample(@Valid @NotNull @RequestBody SearchSampleRequest request) {
     return ResponseEntity.status(HttpStatus.OK)
             .contentType(MediaType.APPLICATION_JSON)
@@ -68,6 +68,16 @@ public class SampleDataController {
   @DeleteMapping("/{id}")
   public ResponseEntity<Response<String>> deleteSample(@Valid @NotNull @PathVariable("id") Long id) {
     sampleApplication.delete(id);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(Response.<String>builder()
+                    .resultInfo(SampleProjectConstants.RESULT_INFO_OK)
+                    .build());
+  }
+
+  @DeleteMapping("/physical-delete/{id}")
+  public ResponseEntity<Response<String>> physicalDelete(@Valid @NotNull @PathVariable("id") Long id) {
+    sampleApplication.physicalDelete(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT)
             .contentType(MediaType.APPLICATION_JSON)
             .body(Response.<String>builder()

@@ -4,5 +4,5 @@ import com.nekose.sampleproject.domain.model.entity.ExampleData;
 import com.nekose.sampleproject.infrastructure.kvs.dto.ExampleDto;
 
 public interface ExampleDataService {
-    ExampleData getExampleData(ExampleDto exampleDto);
+    ExampleData getExampleData(String key, ExampleDto exampleDto);
 }

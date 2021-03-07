@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ExampleApplication {
-    private ExampleDataRepository exampleDataRepository;
-    private ExampleDataService exampleDataService;
+    private final ExampleDataRepository exampleDataRepository;
+    private final ExampleDataService exampleDataService;
 
     public ExampleData get(String key) {
         return exampleDataRepository.get(key)
-                .map(dto -> exampleDataService.getExampleData(dto))
+                .map(dto -> exampleDataService.getExampleData(key, dto))
                 .orElse(ExampleData.builder().build());
     }
 
