@@ -19,6 +19,7 @@ public interface SampleTableMapper {
 
     Optional<SampleTableEntity> findById(Long id);
 
-    List<SampleTableEntity> findByValueAndDeletedFlg(@Param("value") String value,
-                                                     @Param("deletedFlg") Boolean deletedFlg);
+    List<SampleTableEntity> findByNameAndValueAndDeletedFlg(@Param("name") String name,
+                                                            @Param("value") String value,
+                                                            @Param("deletedFlg") Boolean deletedFlg);
 }

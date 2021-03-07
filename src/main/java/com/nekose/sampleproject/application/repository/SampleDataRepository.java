@@ -16,6 +16,7 @@ public interface SampleDataRepository {
 
     Optional<SampleTableEntity> findById(Long id);
 
-    List<SampleTableEntity> findByValueAndDeletedFlg(String value,
-                                                     Boolean deletedFlg);
+    List<SampleTableEntity> findByNameAndValueAndDeletedFlg(String name,
+                                                            String value,
+                                                            Boolean deletedFlg);
 }

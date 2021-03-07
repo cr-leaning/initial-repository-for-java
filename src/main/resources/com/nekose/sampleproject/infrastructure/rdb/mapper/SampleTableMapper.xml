@@ -96,20 +96,24 @@
             <include refid="sampleTableCommonColumn" />
         FROM sample_table
         WHERE id = #{id}
+        AND deleted_flg = false
     </select>
 
-    <select id="findByValueAndDeletedFlg" resultMap="sampleTableEntity" >
+    <select id="findByNameAndValueAndDeletedFlg" resultMap="sampleTableEntity" >
         SELECT
         id,
         <include refid="sampleTableCommonColumn" />
         FROM sample_table
         WHERE 1 = 1
+        <if test="name != null">
+            AND name LIKE '${name}%'
+        </if>
         <if test="value != null">
-            ,value LIKE '${value}%'
+            AND value LIKE '${value}%'
         </if>
         <if test="deletedFlg != null">
-            ,deleted_flg = #{deletedFlg}
+            AND deleted_flg = #{deletedFlg}
         </if>
-        ORDER name DESC
+        ORDER BY update_date DESC
     </select>
 </mapper>

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
@@ -41,6 +43,6 @@ public class ExampleDataRepositoryImpl implements ExampleDataRepository {
     }
 
     private String generateKey(String key) {
-        return redis.getPrefix() + DateTimeFormatter.ofPattern("yyyyMMddhhmmssxxxz").format(Instant.now()) + key;
+        return redis.getPrefix() + key;
     }
 }

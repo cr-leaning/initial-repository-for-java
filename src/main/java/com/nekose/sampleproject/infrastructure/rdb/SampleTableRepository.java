@@ -41,7 +41,7 @@ public class SampleTableRepository implements SampleDataRepository {
     }
 
     @Override
-    public List<SampleTableEntity> findByValueAndDeletedFlg(String value, Boolean deletedFlg) {
-        return sqlSession.getMapper(SampleTableMapper.class).findByValueAndDeletedFlg(value, deletedFlg);
+    public List<SampleTableEntity> findByNameAndValueAndDeletedFlg(String name, String value, Boolean deletedFlg) {
+        return sqlSession.getMapper(SampleTableMapper.class).findByNameAndValueAndDeletedFlg(name, value, deletedFlg);
     }
 }

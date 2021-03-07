@@ -26,7 +26,8 @@ public class SampleApplication {
 
     public SearchSampleData search(SearchSampleRequest request) {
         return sampleDataService.getSearchSampleData(
-                sampleDataRepository.findByValueAndDeletedFlg(request.getValue(), request.getDeleteFlg()));
+                sampleDataRepository.findByNameAndValueAndDeletedFlg(
+                        request.getName(), request.getValue(), request.getDeleteFlg()));
     }
 
     public SampleData store(SampleRequest request) {
