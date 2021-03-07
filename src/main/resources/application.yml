@@ -5,6 +5,7 @@ server:
     threads:
       max: "${TOMCAT_MAX_THREADS:100}"
       min-spare: "${MIN_SPARE_THREAD:10}"
+  shutdown: graceful
 management:
   endpoints:
     web:
@@ -22,13 +23,70 @@ management:
 ### for spring
 spring:
   application:
-    name: user-management
+    name: sample-project
   profiles:
-    active: ${PROFILE:local}
+    active: "${PROFILE:local}"
+  jmx:
+    enabled: true
+  ### for spring cloud
+  cloud:
+    features:
+      enabled: false
+  ### for DB
   datasource:
     username: ${DB_USER:app_user}
     password: ${DB_PASSWARD:app_user}
-    url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/user_management}
+    url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/sample_project}
+    driver-class-name: org.mariadb.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 1
+      connection-timeout: 3000
+      max-lifetime: 60000
+      pool-name: sample-projcet-pool
   flyway:
     enabled: false
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    timeout: 2000
+    jedis:
+      pool:
+        max-active: 5
+        max-wait: 2000
+        max-idle: 5
+        min-idle: 1
+  ### for Scheduler
+  task:
+    scheduling:
+      pool:
+        size: 3
+      thread-name-prefix: sampleProjectScheduler-
+      shutdown:
+        await-termination: true
+        await-termination-period: 30s
 
+# for OAuth2
+security:
+  oauth2:
+    resource:
+      user-info-uri: https://api.github.com/user
+      preferTokenInfo: false
+
+
+mybatis:
+  configuration:
+    default-statement-timeout: 2
+
+logging:
+  level:
+    root: ${LOG_LEVEL:INFO}
+    com.nekose.sampleproject: ${APP_LOG_LEVEL:INFO}
+
+sample-project:
+  redis:
+    prefix: example-data-
+    ttlSeconds: 604800
+  scheduler:
+    cron: ${SCHEDULER_CRON:0/15 * * * * *}

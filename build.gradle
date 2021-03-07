@@ -1,37 +1,16 @@
-buildscript {
-	ext {
-		springBootVersion = '2.4.2'
-		dockerComposeVersion = '0.14.0'
-	}
-    repositories {
-        mavenCentral()
-    	maven {
-   			url "https://plugins.gradle.org/m2/"
-    	}
-    }
-    dependencies {
-        classpath "com.avast.gradle:gradle-docker-compose-plugin:${dockerComposeVersion}"
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-    }
+plugins {
+	id 'org.springframework.boot' version '2.4.2'
+	id 'com.avast.gradle.docker-compose' version '0.14.0'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'eclipse'
+	id 'idea'
+	id 'maven'
 }
 
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'maven'
-apply plugin: 'docker-compose'
-
-group = 'com.nekose.officemanage'
+group = 'com.nekose.sampleproject'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
 
 repositories {
 	mavenCentral()
@@ -42,12 +21,12 @@ sourceSets {
 	main {
 		resources.srcDirs = ["src/main/resources"]
 	}
-	functionalTest {
+	integrationTest {
 		java {
-			srcDir 'src/functionalTest/java'
+			srcDir 'src/integrationTest/java'
 		}
 		resources {
-			srcDir 'src/functionalTest/resources'
+			srcDir 'src/integrationTest/resources'
 		}
 		compileClasspath += main.output + test.output
 		runtimeClasspath += main.output + test.output
@@ -59,6 +38,10 @@ ext {
     mockitoVersion = '2.21.0'
     mariaDbClientVersion = '2.7.2'
     springColudSecurityVersion = '2.2.4.RELEASE'
+	jedisVersion = '3.5.1'
+	springMybatisVersion = '2.1.4'
+	springRedisVersion = '2.4.5'
+	commonsVersion = '3.11'
 }
 
 dependencyManagement {
@@ -72,6 +55,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
 	implementation 'org.springframework.session:spring-session-core'
 	
@@ -85,16 +69,21 @@ dependencies {
 	implementation 'org.springframework.security.oauth:spring-security-oauth2'
     implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure'
 
+	// db
 	implementation "org.mariadb.jdbc:mariadb-java-client:${mariaDbClientVersion}"
+	implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:${springMybatisVersion}"
+	implementation "org.springframework.data:spring-data-redis:${springRedisVersion}"
+	implementation "redis.clients:jedis:${jedisVersion}"
+
+	// other
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation "org.apache.commons:commons-lang3:${commonsVersion}"
 
-    implementation 'com.h2database:h2'
 
-	
+	// for test
 	testAnnotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'com.h2database:h2'
 	testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
 }
 
@@ -110,8 +99,8 @@ configurations {
 	testCompileOnly {
 		extendsFrom testAnnotationProcessor
 	}
-	functionalTestCompile.extendsFrom testImplementation
-	functionalTestRuntime.extendsFrom testRuntime
+	integrationTestCompile.extendsFrom testImplementation
+	integrationTestRuntime.extendsFrom testRuntime
 	compileClasspath {
 		resolutionStrategy.activateDependencyLocking()
 	}
@@ -144,11 +133,11 @@ test {
 	dependsOn(composeUp)
 }
 
-task functionalTest(type: Test) {
+task integrationTest(type: Test) {
 	useJUnitPlatform()
 	group = "verification"
-	testClassesDirs = sourceSets.functionalTest.output
-	classpath = sourceSets.functionalTest.runtimeClasspath
+	testClassesDirs = sourceSets.integrationTest.output
+	classpath = sourceSets.integrationTest.runtimeClasspath
 	testLogging {
 		exceptionFormat 'full'
 		events('started', 'passed', 'skipped', 'failed')
@@ -167,18 +156,5 @@ task updateLockFile(type: Exec) {
 dockerCompose {
 	isRequiredBy(project.tasks.getByName("bootRun"))
 	isRequiredBy(project.tasks.getByName("test"))
-	isRequiredBy(project.tasks.getByName("functionalTest"))
+	isRequiredBy(project.tasks.getByName("integrationTest"))
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
