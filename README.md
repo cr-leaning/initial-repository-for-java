@@ -11,7 +11,7 @@ https://docs.github.com/ja/github/creating-cloning-and-archiving-repositories/du
 |API | :white_check_mark: | Database(R/W) | | Database(R/O) | :white_check_mark: |
 |External API | | Storage | | Migration SQL | :white_check_mark: |
 |Scheduler | | Batch Job | | Consumer | |
-|Producer | | Unit Test | :white_check_mark: | Functional Test | |
+|Producer | | Unit Test | :white_check_mark: | Integration Test | |
 
 ## 使用技術
 |Category | |
