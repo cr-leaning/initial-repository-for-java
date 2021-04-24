@@ -11,6 +11,6 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "sample-project")
 public class SampleProperties {
     private RedisProperties redis;
-    private DummyApiProperties dummyApi;
+//    private DummyApiProperties dummyApi;
     private CryptoProperties crypto;
 }

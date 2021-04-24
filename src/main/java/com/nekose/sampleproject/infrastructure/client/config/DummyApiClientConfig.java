@@ -1,6 +1,6 @@
 package com.nekose.sampleproject.infrastructure.client.config;
 
-import com.nekose.sampleproject.config.property.SampleProperties;
+import com.nekose.sampleproject.config.property.DummyApiProperties;
 import com.nekose.sampleproject.exception.ApiClientException;
 import feign.Client;
 import feign.Request;
@@ -27,29 +27,27 @@ import static feign.FeignException.errorStatus;
 @Slf4j
 @RequiredArgsConstructor
 public class DummyApiClientConfig {
-    private final SampleProperties sampleProperties;
+    private final DummyApiProperties dummyApiProperties;
     private final ObjectFactory<HttpMessageConverters> messageConvertersObjectFactory;
 
     @Bean
     public Client getDummyApiTokenClient() {
-        var apiProperties = sampleProperties.getDummyApi();
         var requestConfig = RequestConfig.custom()
-                .setConnectionRequestTimeout(apiProperties.getConnectTimeout())
-                .setConnectTimeout(apiProperties.getConnectTimeout())
-                .setSocketTimeout(apiProperties.getReadTimeout())
+                .setConnectionRequestTimeout(dummyApiProperties.getConnectTimeout())
+                .setConnectTimeout(dummyApiProperties.getConnectTimeout())
+                .setSocketTimeout(dummyApiProperties.getReadTimeout())
                 .build();
         return new ApacheHttpClient(HttpClientBuilder.create()
                 .setDefaultRequestConfig(requestConfig)
-                .setMaxConnTotal(apiProperties.getMaxConnection())
-                .setMaxConnPerRoute(apiProperties.getMaxConnection())
+                .setMaxConnTotal(dummyApiProperties.getMaxConnection())
+                .setMaxConnPerRoute(dummyApiProperties.getMaxConnection())
                 .build());
     }
 
     @Bean
     public Request.Options getDummyApiTokenClientOptions() {
-        var apiProperties = sampleProperties.getDummyApi();
-        return new Request.Options(apiProperties.getConnectTimeout(), TimeUnit.MILLISECONDS,
-                apiProperties.getReadTimeout(), TimeUnit.MILLISECONDS, true);
+        return new Request.Options(dummyApiProperties.getConnectTimeout(), TimeUnit.MILLISECONDS,
+                dummyApiProperties.getReadTimeout(), TimeUnit.MILLISECONDS, true);
     }
 
     @Bean
