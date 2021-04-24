@@ -1,7 +1,7 @@
 package com.nekose.sampleproject.infrastructure.client;
 
 import com.nekose.sampleproject.application.repository.DummyDataRepository;
-import com.nekose.sampleproject.config.property.SampleProperties;
+import com.nekose.sampleproject.config.property.DummyApiProperties;
 import com.nekose.sampleproject.exception.ApiClientException;
 import com.nekose.sampleproject.infrastructure.client.feign.DummyApiClient;
 import com.nekose.sampleproject.infrastructure.client.request.DummyApiRequest;
@@ -23,13 +23,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DummyDataRepositoryImpl implements DummyDataRepository {
     private final DummyApiClient dummyApiClient;
-    private final SampleProperties sampleProperties;
+    private final DummyApiProperties dummyApiProperties;
     private final StringCryptoConverter stringCryptoConverter;
 
 
     @Override
     public Optional<DummyApiResponse> get(String key) {
-        int retryLimit = sampleProperties.getDummyApi().getRetryLimit();
+        int retryLimit = dummyApiProperties.getRetryLimit();
         String message = null;
         for (int i = 0; i < retryLimit; i++) {
             try {
