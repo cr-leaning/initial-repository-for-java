@@ -16,24 +16,24 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(
         name = "dummy-api",
-        url = "${sample-project.dummy-api.host-url}",
+        url = "${dummy-api.host-url}",
         configuration = DummyApiClientConfig.class
 )
 public interface DummyApiClient {
-    @GetMapping(value = "${sample-project.dummy-api.token-endpoint}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @GetMapping(value = "${dummy-api.token-endpoint}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     DummyApiTokenResponse getAccessToken(@RequestHeader("Authorization") String basicToken,
                                          MultiValueMap<String, String> accessTokenParams);
 
-    @GetMapping(value = "${sample-project.dummy-api.endpoint}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "${dummy-api.endpoint}", consumes = MediaType.APPLICATION_JSON_VALUE)
     DummyApiResponse getDummyData(@RequestHeader("Authorization") String bearerToken,
                                   @PathVariable("id") String id);
 
-    @PutMapping(value = "${sample-project.dummy-api.endpoint}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "${dummy-api.endpoint}", consumes = MediaType.APPLICATION_JSON_VALUE)
     DummyApiResponse storeDummyData(@RequestHeader("Authorization") String bearerToken,
                                     @PathVariable("id") String id,
                                     @RequestBody DummyApiRequest request);
 
-    @DeleteMapping(value = "${sample-project.dummy-api.endpoint}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "${dummy-api.endpoint}", consumes = MediaType.APPLICATION_JSON_VALUE)
     void deleteDummyData(@RequestHeader("Authorization") String bearerToken,
                          @PathVariable("id") String id);
 }
