@@ -90,3 +90,19 @@ sample-project:
     ttlSeconds: 604800
   scheduler:
     cron: ${SCHEDULER_CRON:0/15 * * * * *}
+  crypto:
+    key: ${SAMPLE_CRYPTO_KEY:testCryptoKey}
+    hash-salt: ${SAMPLE_HASH_SALT:testSaltString}
+
+dummy-api:
+  host-url: ${DUMMY_API_HOST_URL:http://localhost:${MOCK_TCP_8080:9999}/dummy}
+  endpoint: ${DUMMY_API_ENDPOINT:/v1/dummyApi/{id}}
+  connection-timeout: 10000
+  read-timeout: 10000
+  max-connection: 50
+  retry-limit: 3
+
+auth-module:
+  token-url: ${AUTH_MODULE_TOKEN_URL:http://localhost:8080/v1/auth/token}
+  client-id: ${AUTH_MODULE_CLIENT_ID:testClientId}
+  client-secret: ${AUTH_MODULE_CLIENT_SECRET:testClientSecret}

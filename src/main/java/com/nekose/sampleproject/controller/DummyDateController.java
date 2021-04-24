@@ -1,10 +1,10 @@
 package com.nekose.sampleproject.controller;
 
-import com.nekose.sampleproject.application.ExampleApplication;
+import com.nekose.sampleproject.application.DummyApplication;
 import com.nekose.sampleproject.constant.ResultInfoConstants;
-import com.nekose.sampleproject.controller.request.ExampleRequest;
+import com.nekose.sampleproject.controller.request.DummyRequest;
 import com.nekose.sampleproject.controller.response.Response;
-import com.nekose.sampleproject.domain.model.entity.ExampleData;
+import com.nekose.sampleproject.domain.model.entity.DummyData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,36 +24,36 @@ import javax.validation.constraints.NotNull;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/examples")
-public class ExampleDateController {
-  private final ExampleApplication exampleApplication;
+@RequestMapping("/v1/dummy")
+public class DummyDateController {
+  private final DummyApplication dummyApplication;
 
   @GetMapping("/{key}")
-  public ResponseEntity<Response<ExampleData>> get(@Valid @NotNull @PathVariable("key") String key) {
+  public ResponseEntity<Response<DummyData>> get(@Valid @NotNull @PathVariable("key") String key) {
     return ResponseEntity.status(HttpStatus.OK)
             .contentType(MediaType.APPLICATION_JSON)
-            .body(Response.<ExampleData>builder()
+            .body(Response.<DummyData>builder()
                     .resultInfo(ResultInfoConstants.RESULT_INFO_OK)
-                    .data(exampleApplication.get(key))
+                    .data(dummyApplication.get(key))
                     .build());
   }
 
   @PutMapping
-  public ResponseEntity<Response<ExampleData>> store(@Valid @NotNull @RequestBody ExampleRequest request) {
+  public ResponseEntity<Response<DummyData>> store(@Valid @NotNull @RequestBody DummyRequest request) {
     return ResponseEntity.status(HttpStatus.OK)
             .contentType(MediaType.APPLICATION_JSON)
-            .body(Response.<ExampleData>builder()
+            .body(Response.<DummyData>builder()
                     .resultInfo(ResultInfoConstants.RESULT_INFO_OK)
-                    .data(exampleApplication.store(request))
+                    .data(dummyApplication.store(request))
                     .build());
   }
 
   @DeleteMapping("/{key}")
-  public ResponseEntity<Response<String>> delete(@Valid @NotNull @PathVariable("key") String key) {
-    exampleApplication.delete(key);
+  public ResponseEntity<Response<DummyData>> delete(@Valid @NotNull @PathVariable("key") String key) {
+    dummyApplication.delete(key);
     return ResponseEntity.status(HttpStatus.NO_CONTENT)
             .contentType(MediaType.APPLICATION_JSON)
-            .body(Response.<String>builder()
+            .body(Response.<DummyData>builder()
                     .resultInfo(ResultInfoConstants.RESULT_INFO_OK)
                     .build());
   }

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class SampleTableRepository implements SampleDataRepository {
+public class SampleTableRepositoryImpl implements SampleDataRepository {
     private final SqlSession sqlSession;
 
     @Override
