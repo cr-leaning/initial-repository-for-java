@@ -1,6 +1,6 @@
 plugins {
-	id 'org.springframework.boot' version '2.4.4'
-	id 'com.avast.gradle.docker-compose' version '0.14.0'
+	id 'org.springframework.boot' version '2.5.5'
+	id 'com.avast.gradle.docker-compose' version '0.14.9'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 	id 'eclipse'
@@ -34,14 +34,14 @@ sourceSets {
 }
 
 ext {
-	springCloudVersion = '2020.0.1'
-    mockitoVersion = '2.21.0'
-    mariaDbClientVersion = '2.7.2'
-    springColudSecurityVersion = '2.2.4.RELEASE'
-	jedisVersion = '3.5.1'
-	springMybatisVersion = '2.1.4'
-	springRedisVersion = '2.4.5'
-	commonsVersion = '3.11'
+	springCloudVersion = '2020.0.4'
+    mockitoVersion = '4.0.0'
+    mariaDbClientVersion = '2.7.4'
+    springColudSecurityVersion = '2.2.5.RELEASE'
+	jedisVersion = '3.7.0'
+	springMybatisVersion = '2.2.0'
+	springRedisVersion = '2.5.5'
+	commonsVersion = '3.12.0'
 }
 
 dependencyManagement {
@@ -79,6 +79,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation "org.apache.commons:commons-lang3:${commonsVersion}"
 
+//	// https://mvnrepository.com/artifact/io.quarkus/quarkus-spring-di
+//	implementation 'io.quarkus:quarkus-spring-di:2.3.0.Final'
 
 	// for test
 	testAnnotationProcessor 'org.projectlombok:lombok'
