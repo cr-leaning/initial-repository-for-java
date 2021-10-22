@@ -1,11 +1,11 @@
+import com.sun.org.apache.xalan.internal.xsltc.compiler.Closure
+
 plugins {
-	id 'org.springframework.boot' version '2.5.5'
+	id 'io.quarkus'
 	id 'com.avast.gradle.docker-compose' version '0.14.9'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 	id 'eclipse'
 	id 'idea'
-	id 'maven'
 }
 
 group = 'com.nekose.sampleproject'
@@ -34,64 +34,57 @@ sourceSets {
 }
 
 ext {
-	springCloudVersion = '2020.0.4'
-    mockitoVersion = '4.0.0'
-    mariaDbClientVersion = '2.7.4'
-    springColudSecurityVersion = '2.2.5.RELEASE'
-	jedisVersion = '3.7.0'
-	springMybatisVersion = '2.2.0'
-	springRedisVersion = '2.5.5'
+	lombokVersion = '1.18.22'
 	commonsVersion = '3.12.0'
 }
 
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-	}
-}
+//dependencyManagement {
+//	imports {
+//		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+//	}
+//}
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
-	implementation 'org.springframework.session:spring-session-core'
+	implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+
+	implementation 'io.quarkus:quarkus-arc'
+	implementation 'io.quarkus:quarkus-spring-boot-properties'
+	implementation 'io.quarkus:quarkus-spring-cloud-config-client'
+	implementation 'io.quarkus:quarkus-spring-web'
+	implementation 'io.quarkus:quarkus-spring-di'
+	implementation 'io.quarkus:quarkus-smallrye-health'
+	implementation 'io.quarkus:quarkus-config-yaml'
 	
-	// fegin
-	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-	implementation 'io.github.openfeign:feign-httpclient'
+	// for api client
+	implementation 'io.quarkus:quarkus-rest-client'
+	implementation 'io.quarkus:quarkus-rest-client-jackson'
+	implementation 'io.quarkus:quarkus-smallrye-fault-tolerance'
 
     // security
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation "org.springframework.cloud:spring-cloud-security:${springColudSecurityVersion}"
-	implementation 'org.springframework.security.oauth:spring-security-oauth2'
-    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure'
+	implementation 'io.quarkus:quarkus-spring-security'
 
 	// db
-	implementation "org.mariadb.jdbc:mariadb-java-client:${mariaDbClientVersion}"
-	implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:${springMybatisVersion}"
-	implementation "org.springframework.data:spring-data-redis:${springRedisVersion}"
-	implementation "redis.clients:jedis:${jedisVersion}"
+	implementation 'io.quarkus:quarkus-hibernate-orm-panache'
+	implementation 'io.quarkus:quarkus-jdbc-mariadb'
+//	implementation 'io.quarkiverse.mybatis:quarkus-mybatis:0.0.9'
+	implementation 'io.quarkus:quarkus-redis-client'
+	implementation 'io.quarkus:quarkus-flyway'
 
 	// other
-	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 	implementation "org.apache.commons:commons-lang3:${commonsVersion}"
-
-//	// https://mvnrepository.com/artifact/io.quarkus/quarkus-spring-di
-//	implementation 'io.quarkus:quarkus-spring-di:2.3.0.Final'
+	implementation "io.quarkus:quarkus-smallrye-openapi"
 
 	// for test
-	testAnnotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
+	testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+	testImplementation 'io.quarkus:quarkus-junit5'
+	testImplementation 'io.quarkus:quarkus-junit5-mockito'
+	testImplementation 'io.rest-assured:rest-assured'
 }
 
 configurations {
     all {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+//        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
         exclude group: 'junit', module: 'junit'
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
@@ -103,25 +96,57 @@ configurations {
 	}
 	integrationTestCompile.extendsFrom testImplementation
 	integrationTestRuntime.extendsFrom testRuntime
-	compileClasspath {
-		resolutionStrategy.activateDependencyLocking()
-	}
-	runtimeClasspath {
-		resolutionStrategy.activateDependencyLocking()
-	}
+//	compileClasspath {
+//		resolutionStrategy.activateDependencyLocking()
+//	}
+//	runtimeClasspath {
+//		resolutionStrategy.activateDependencyLocking()
+//	}
+//	annotationProcessor {
+//		resolutionStrategy.activateDependencyLocking()
+//	}
 }
 
-bootRun {
+quarkus {
+	setWorkingDir("$projectDir") // Added to have a similar behavior as Spring Boot
+}
+
+compileJava {
+	options.encoding = 'UTF-8'
+	options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+	options.encoding = 'UTF-8'
+}
+
+//defaultTasks("quarkusBuild")
+//tasks["composeUp"].dependsOn("quarkusBuild")
+
+quarkusDev {
 	jvmArgs = [
-		'-Dspring.profiles.active=local',
+		'-Dquarkus.profile=local',
 		'-Dlogging.config=classpath:log4j2-local.xml'
 	]
+	logger.lifecycle("jvmArgs in")
+	logger.lifecycle(project.hasProperty('jvmArgs') as String)
+	logger.lifecycle("size: {}", project.getProperties().size())
+	if (project.getProperties().size() > 0) {
+		project.getProperties()
+				.entrySet()
+				.iterator()
+				.forEachRemaining(p -> {
+					logger.lifecycle("key : {}", p.getKey())
+//					logger.lifecycle("value : {}", p.getValue())
+				})
+	}
+
 	if (project.hasProperty('jvmArgs')) {
 		jvmArgs = (project.jvmArgs.split("\\s+" as Closure) as List)
+		logger.lifecycle("jvmArgs: {}", jvmArgs)
 	}
 	dependsOn(composeUp)
 }
-
 test {
 	jvmArgs = [
 		'-Dlogging.config=classpath:log4j2-local.xml'
@@ -156,7 +181,7 @@ task updateLockFile(type: Exec) {
 }
 
 dockerCompose {
-	isRequiredBy(project.tasks.getByName("bootRun"))
+	isRequiredBy(project.tasks.getByName("quarkusDev"))
 	isRequiredBy(project.tasks.getByName("test"))
 	isRequiredBy(project.tasks.getByName("integrationTest"))
 }

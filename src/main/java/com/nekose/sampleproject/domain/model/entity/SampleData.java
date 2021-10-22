@@ -2,9 +2,8 @@ package com.nekose.sampleproject.domain.model.entity;
 
 import com.nekose.sampleproject.infrastructure.rdb.entity.SampleTableEntity;
 import com.nekose.sampleproject.util.DateUtils;
-import lombok.*;
-
-import java.util.Date;
+import lombok.Builder;
+import lombok.Data;
 
 @Builder
 @Data
@@ -21,7 +20,10 @@ public class SampleData {
                 .id(entity.getId())
                 .name(entity.getName())
                 .value(entity.getValue())
-                .dataStatusInfo(entity.getDataStatusInfo())
+                .dataStatusInfo(DataStatusInfo.builder()
+                        .status(entity.getStatus())
+                        .information(entity.getInformation())
+                        .build())
                 .createDate(DateUtils.toIsoFormatString(entity.getCreateDate()))
                 .updateDate(DateUtils.toIsoFormatString(entity.getUpdateDate()))
                 .build();

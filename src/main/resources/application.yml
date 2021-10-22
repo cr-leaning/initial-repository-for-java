@@ -1,108 +1,72 @@
-### common
-server:
-  port: 8100
-  tomcat:
-    threads:
-      max: "${TOMCAT_MAX_THREADS:100}"
-      min-spare: "${MIN_SPARE_THREAD:10}"
-  shutdown: graceful
-management:
-  endpoints:
-    web:
-      # for actuator
-      base-path: /
-      exposure:
-        include:
-        - "health"
-        - "configprops"
-        - "info"
-  endpoint:
-    health:
-      show-details: "ALWAYS"
-
-### for spring
-spring:
+### quarkus
+quarkus:
   application:
     name: sample-project
-  profiles:
-    active: "${PROFILE:local}"
-  jmx:
-    enabled: true
-  ### for spring cloud
-  cloud:
-    features:
-      enabled: false
+  profile: "${PROFILE:local}"
+  config:
+    profile:
+      parent: "common"
+  ### for Web server
+  http:
+    port: 8100
+  shutdown:
+    timeout: 120S
+  thread-pool:
+    core-threads: 2
+    max-threads: 10
+    shutdown-timeout: 120S
+    shutdown-interrupt: 60S
+    keep-alive-time: 60S
+  ### for health check
+  smallrye-health:
+    root-path: "health"
+    liveness-path: "live"
+    readiness-path: "ready"
+    ui:
+      enable: false
   ### for DB
   datasource:
-    username: ${DB_USER:app_user}
-    password: ${DB_PASSWARD:app_user}
-    url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/sample_project}
-    driver-class-name: org.mariadb.jdbc.Driver
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      maximum-pool-size: 3
-      minimum-idle: 1
-      connection-timeout: 3000
-      max-lifetime: 60000
-      pool-name: sample-projcet-pool
+    db-kind: mariadb
+#    username: ${DB_USER:app_user}
+#    password: ${DB_PASSWARD:app_user}
+    username: root
+    password: root
+    jdbc:
+#      url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/sample_project}
+      url: ${DB_URL:jdbc:mysql://127.0.0.1:${MYSQL_TCP_3306:3306}/sample_project?useSSL=false}
+      driver: org.mariadb.jdbc.Driver
+      initial-size: 0
+      min-size: 3
+      max-size: 10
+      idle-removal-interval: 2M
   flyway:
-    enabled: false
-  redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
-    timeout: 2000
-    jedis:
-      pool:
-        max-active: 5
-        max-wait: 2000
-        max-idle: 5
-        min-idle: 1
-  ### for Scheduler
-  task:
-    scheduling:
-      pool:
-        size: 3
-      thread-name-prefix: sampleProjectScheduler-
-      shutdown:
-        await-termination: true
-        await-termination-period: 30s
+    clean-at-start: false
+    clean-disabled: true
+    migrate-at-start: false
+  ### for log
+  log:
+    level: ${LOG_LEVEL:INFO}
 
-# for OAuth2
-security:
-  oauth2:
-    resource:
-      user-info-uri: https://api.github.com/user
-      preferTokenInfo: false
+#logging:
+#  level:
+#    root: ${LOG_LEVEL:INFO}
+#    com.nekose.sampleproject: ${APP_LOG_LEVEL:INFO}
 
+#sample-project:
+#  redis:
+#    prefix: example-data-
+#    ttlSeconds: 604800
+#  scheduler:
+#    cron: ${SCHEDULER_CRON:0/15 * * * * *}
+#  crypto:
+#    key: ${SAMPLE_CRYPTO_KEY:testCryptoKey}
+#    hash-salt: ${SAMPLE_HASH_SALT:testSaltString}
 
-mybatis:
-  configuration:
-    default-statement-timeout: 2
-
-logging:
-  level:
-    root: ${LOG_LEVEL:INFO}
-    com.nekose.sampleproject: ${APP_LOG_LEVEL:INFO}
-
-sample-project:
-  redis:
-    prefix: example-data-
-    ttlSeconds: 604800
-  scheduler:
-    cron: ${SCHEDULER_CRON:0/15 * * * * *}
-  crypto:
-    key: ${SAMPLE_CRYPTO_KEY:testCryptoKey}
-    hash-salt: ${SAMPLE_HASH_SALT:testSaltString}
-
+# for API Client
+dummy-api/mp-rest/url: ${DUMMY_API_HOST_URL:http://localhost:${MOCK_TCP_8080:9999}/dummy}
+dummy-api/mp-rest/connectTimeout: 10000
+dummy-api/mp-rest/readTimeout: 15000
 dummy-api:
-  host-url: ${DUMMY_API_HOST_URL:http://localhost:${MOCK_TCP_8080:9999}/dummy}
   endpoint: ${DUMMY_API_ENDPOINT:/v1/dummyApi/{id}}
-  connection-timeout: 10000
-  read-timeout: 10000
   max-connection: 50
   retry-limit: 3
-
-auth-module:
-  token-url: ${AUTH_MODULE_TOKEN_URL:http://localhost:8080/v1/auth/token}
-  client-id: ${AUTH_MODULE_CLIENT_ID:testClientId}
-  client-secret: ${AUTH_MODULE_CLIENT_SECRET:testClientSecret}

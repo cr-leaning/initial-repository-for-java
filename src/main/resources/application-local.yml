@@ -1,39 +1,22 @@
-### common
-server:
-  port: 8100
-  tomcat:
-    threads:
-      max: 50
-management:
-  endpoints:
-    web:
-      # for actuator
-      base-path: /
-      exposure:
-        include:
-        - "health"
-        - "configprops"
-        - "info"
-  endpoint:
-    health:
-      show-details: "ALWAYS"
-  info:
-    git:
-      mode: full
-
-### for spring
-spring:
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
-    locations: ["classpath:/db/migration"]
+### quarkus
+quarkus:
+  ### for health check
+  smallrye-health:
+    ui:
+      enable: true
+  ### for DB
   datasource:
     username: root
     password: root
-    url: ${DB_URL:jdbc:mysql://127.0.0.1:${MYSQL_TCP_3306:3306}/sample_project?useSSL=false}
-  redis:
-    port: ${REDIS_TCP_6379:6379}
+    jdbc:
+      url: ${DB_URL:jdbc:mysql://127.0.0.1:${MYSQL_TCP_3306:3306}/sample_project?useSSL=false}
+  flyway:
+    clean-at-start: true
+    clean-disabled: false
+    migrate-at-start: true
+    locations: ["classpath:/db/migration"]
+  ### for log
+  log:
+    level:
+      com.nekose.sampleproject: DEBUG
 
-logging:
-  level:
-    com.nekose.sampleproject: DEBUG

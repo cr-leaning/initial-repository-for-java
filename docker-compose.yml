@@ -15,7 +15,7 @@ services:
     image: library/mariadb:10.5
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
     ports: 
-      - 3306
+      - "3306"
     volumes:
       - ./init.sql:/docker-entrypoints-initdb.d/init.sql
     environment:
@@ -50,5 +50,5 @@ services:
     image: library/redis:6.0
     command: redis-server --appendonly yes
     ports:
-      - 6379
+      - "6379"
       

@@ -15,7 +15,7 @@ public class SearchSampleData {
     public static SearchSampleData from(List<SampleTableEntity> entities) {
         return SearchSampleData.builder()
                 .samples(entities.stream()
-                        .map(entity ->  SampleData.from(entity))
+                        .map(SampleData::from)
                         .collect(Collectors.toList()))
                 .build();
     }
