@@ -7,7 +7,6 @@ import com.nekose.sampleproject.infrastructure.client.response.DummyApiErrorResp
 import com.nekose.sampleproject.infrastructure.client.response.DummyApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Profile("test")
 @Slf4j
 @RestController
 @RequiredArgsConstructor

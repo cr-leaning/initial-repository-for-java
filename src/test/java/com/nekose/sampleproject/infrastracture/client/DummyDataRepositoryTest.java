@@ -1,12 +1,11 @@
 package com.nekose.sampleproject.infrastracture.client;
 
 import com.nekose.sampleproject.application.repository.DummyDataRepository;
+import io.quarkus.test.junit.QuarkusTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles({"local", "test"})
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@QuarkusTest
+//@QuarkusTestResource(WiremockCountries.class)
 class DummyDataRepositoryTest {
     @Autowired
     private DummyDataRepository dummyDataRepository;

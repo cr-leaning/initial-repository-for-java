@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SampleApplication {
+public class  SampleApplication {
     private final SampleDataRepository sampleDataRepository;
     private final SampleTransaction sampleTransaction;
     private final SampleDataService sampleDataService;
 
     public SampleData get(Long id) {
-        return sampleDataRepository.findById(id)
+        return sampleDataRepository.getById(id)
                 .map(entity -> sampleDataService.getSampleData(entity))
                 .orElse(null);
     }

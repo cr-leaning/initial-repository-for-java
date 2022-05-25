@@ -14,7 +14,7 @@ public interface SampleDataRepository {
 
     void physicalDelete(Long id);
 
-    Optional<SampleTableEntity> findById(Long id);
+    Optional<SampleTableEntity> getById(Long id);
 
     List<SampleTableEntity> findByNameAndValueAndDeletedFlg(String name,
                                                             String value,
